@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viral Vector Calculators</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles and transitions */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind slate-50 */
+        }
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-blue-700 text-white shadow-md">
+        <div class="max-w-5xl mx-auto px-4 py-6">
+            <h1 class="text-3xl font-bold tracking-tight">Viral Vector Calculators</h1>
+            <p class="text-blue-200 mt-2 text-sm font-medium">Reference: PV_AAV6_production.xlsx</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 py-8">
+        
+        <!-- Tab Navigation -->
+        <nav class="flex space-x-1 border-b border-gray-200 mb-6" aria-label="Tabs">
+            <button onclick="switchTab('aav6')" id="tab-btn-aav6" class="tab-button active bg-white border-t border-l border-r border-gray-200 text-blue-700 font-semibold py-3 px-6 rounded-t-lg focus:outline-none transition-colors duration-150 ease-in-out">
+                AAV6 Production
+            </button>
+            <button onclick="switchTab('lenti')" id="tab-btn-lenti" class="tab-button bg-gray-50 border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100 font-medium py-3 px-6 rounded-t-lg focus:outline-none transition-colors duration-150 ease-in-out">
+                Lentivirus PEI
+            </button>
+        </nav>
+
+        <!-- TAB 1: AAV6 Production Calculator -->
+        <section id="aav6" class="tab-content active">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                <div class="bg-blue-50 border-b border-gray-200 px-6 py-4">
+                    <h2 class="text-lg font-semibold text-blue-900">AAV6 Production Inputs</h2>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Donor Concentration (ng/µL)</label>
+                        <input type="number" id="aav-donor-conc" value="216.3" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">pGDM6 Concentration (ng/µL)</label>
+                        <input type="number" id="aav-pgdm6-conc" value="303.8" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Number of Dishes</label>
+                        <input type="number" id="aav-dishes" value="1" step="1" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
+                    </div>
+                </div>
+            </div>
+
+            <!-- AAV6 Outputs -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Card A: DNA Mix -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="bg-blue-600 px-6 py-4">
+                        <h3 class="text-lg font-semibold text-white">Card A: DNA Mix</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-center pb-3 border-b border-gray-100">
+                                <span class="text-gray-600 font-medium">Donor Volume</span>
+                                <span class="text-lg font-bold text-slate-800"><span id="aav-out-donor-vol">0.00</span> µL</span>
+                            </li>
+                            <li class="flex justify-between items-center pb-3 border-b border-gray-100">
+                                <span class="text-gray-600 font-medium">pGDM6 Volume</span>
+                                <span class="text-lg font-bold text-slate-800"><span id="aav-out-pgdm6-vol">0.00</span> µL</span>
+                            </li>
+                            <li class="flex justify-between items-center pb-3 border-b border-gray-100">
+                                <span class="text-gray-600 font-medium">OptiMEM</span>
+                                <span class="text-lg font-bold text-blue-600"><span id="aav-out-dna-optimem">0.00</span> µL</span>
+                            </li>
+                            <li class="flex justify-between items-center pt-2">
+                                <span class="text-gray-900 font-bold">Total DNA Mix Volume</span>
+                                <span class="text-xl font-black text-blue-800"><span id="aav-out-dna-total">0.00</span> µL</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Card B: PEI Mix -->
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                    <div class="bg-indigo-600 px-6 py-4">
+                        <h3 class="text-lg font-semibold text-white">Card B: PEI Mix</h3>
+                    </div>
+                    <div class="p-6">
+                        <ul class="space-y-4">
+                            <li class="flex justify-between items-center pb-3 border-b border-gray-100">
+                                <span class="text-gray-600 font-medium">PEI Volume</span>
+                                <span class="text-lg font-bold text-slate-800"><span id="aav-out-pei-vol">0.00</span> µL</span>
+                            </li>
+                            <li class="flex justify-between items-center pb-3 border-b border-gray-100">
+                                <span class="text-gray-600 font-medium">OptiMEM</span>
+                                <span class="text-lg font-bold text-indigo-600"><span id="aav-out-pei-optimem">0.00</span> µL</span>
+                            </li>
+                            <li class="flex justify-between items-center pt-14"> <!-- Padding to align total with card A -->
+                                <span class="text-gray-900 font-bold">Total PEI Mix Volume</span>
+                                <span class="text-xl font-black text-indigo-800"><span id="aav-out-pei-total">0.00</span> µL</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: Lentivirus PEI Calculator -->
+        <section id="lenti" class="tab-content">
+            
+            <!-- Section A: PEI & OptiMEM Mix -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                <div class="bg-blue-50 border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-blue-900">Section A: PEI & OptiMEM Mix</h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Volume of Culture per dish (mL)</label>
+                            <input type="number" id="lenti-culture-vol" value="10" step="0.5" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Number of Dishes</label>
+                            <input type="number" id="lenti-dishes" value="1" step="1" min="1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-shadow">
+                        </div>
+                    </div>
+                    
+                    <div class="bg-gray-50 rounded-lg p-5 border border-gray-100">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase tracking-wider mb-4">Outputs</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                            <div class="bg-white p-4 rounded border border-gray-200 shadow-sm">
+                                <div class="text-sm text-gray-500 mb-1">PEI Volume</div>
+                                <div class="text-xl font-bold text-slate-800"><span id="lenti-out-pei-vol">0.00</span> mL</div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-gray-200 shadow-sm">
+                                <div class="text-sm text-gray-500 mb-1">OptiMEM Volume</div>
+                                <div class="text-xl font-bold text-blue-600"><span id="lenti-out-optimem-vol">0.00</span> mL</div>
+                            </div>
+                            <div class="bg-white p-4 rounded border border-gray-200 shadow-sm border-l-4 border-l-blue-600">
+                                <div class="text-sm text-gray-900 font-bold mb-1">Total Volume</div>
+                                <div class="text-xl font-black text-blue-800"><span id="lenti-out-total-vol">0.00</span> mL</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section B: Plasmid DNA Mix -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+                <div class="bg-indigo-50 border-b border-gray-200 px-6 py-4">
+                    <h2 class="text-lg font-semibold text-indigo-900">Section B: Plasmid DNA Mix</h2>
+                </div>
+                <div class="p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Target Vol / dish (µL)</label>
+                            <input type="number" id="lenti-target-vol" value="500" step="10" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">psPAX2 Vol (µL)</label>
+                            <input type="number" id="lenti-pspax2" value="8.3" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">pMD2.G Vol (µL)</label>
+                            <input type="number" id="lenti-pmd2g" value="13.2" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Transfer DNA Vol (µL)</label>
+                            <input type="number" id="lenti-transfer" value="13.4" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-shadow">
+                        </div>
+                    </div>
+
+                    <div class="bg-indigo-900 rounded-lg p-6 text-white shadow-inner flex flex-col md:flex-row justify-between items-center">
+                        <div class="mb-4 md:mb-0 text-center md:text-left">
+                            <div class="text-indigo-200 text-sm font-medium uppercase tracking-wider mb-1">Required OptiMEM</div>
+                            <div class="text-3xl font-black"><span id="lenti-out-dna-optimem">0.00</span> <span class="text-xl font-normal">µL</span></div>
+                        </div>
+                        <div class="text-center md:text-right border-t md:border-t-0 md:border-l border-indigo-700 pt-4 md:pt-0 md:pl-6">
+                            <div class="text-indigo-300 text-sm mb-1">Total Target Volume</div>
+                            <div class="text-xl font-bold"><span id="lenti-out-dna-total">0.00</span> µL</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="mt-auto py-6 text-center text-sm text-gray-500">
+        <p>Interactive tool built for real-time viral vector calculations.</p>
+    </footer>
+
+    <script>
+        // Utility: Format numbers to 2 decimal places safely
+        function formatNumber(num) {
+            if (isNaN(num) || !isFinite(num)) return "0.00";
+            return num.toFixed(2);
+        }
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Reset all buttons styling
+            document.querySelectorAll('.tab-button').forEach(el => {
+                el.classList.remove('active', 'bg-white', 'border-t', 'border-l', 'border-r', 'border-gray-200', 'text-blue-700', 'font-semibold');
+                el.classList.add('bg-gray-50', 'border-transparent', 'text-gray-500', 'font-medium');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+            
+            // Highlight selected button
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            activeBtn.classList.remove('bg-gray-50', 'border-transparent', 'text-gray-500', 'font-medium');
+            activeBtn.classList.add('active', 'bg-white', 'border-t', 'border-l', 'border-r', 'border-gray-200', 'text-blue-700', 'font-semibold');
+        }
+
+        // --- AAV6 Calculation Logic ---
+        function calculateAAV6() {
+            const donorConc = parseFloat(document.getElementById('aav-donor-conc').value) || 0;
+            const pgdm6Conc = parseFloat(document.getElementById('aav-pgdm6-conc').value) || 0;
+            const dishes = parseFloat(document.getElementById('aav-dishes').value) || 0;
+
+            // Formulas
+            const donorBase = donorConc > 0 ? 6000 / donorConc : 0;
+            const pgdm6Base = pgdm6Conc > 0 ? 22000 / pgdm6Conc : 0;
+            
+            const finalDonor = donorBase * 1.1 * dishes;
+            const finalPGDM6 = pgdm6Base * 1.1 * dishes;
+            const totalDNAMix = 500 * dishes;
+            const dnaOptimem = totalDNAMix - (finalDonor + finalPGDM6);
+
+            const finalPEI = 123.2 * dishes; // 112 * 1.1 = 123.2
+            const totalPEIMix = 500 * dishes;
+            const peiOptimem = totalPEIMix - finalPEI;
+
+            // Update DOM
+            document.getElementById('aav-out-donor-vol').textContent = formatNumber(finalDonor);
+            document.getElementById('aav-out-pgdm6-vol').textContent = formatNumber(finalPGDM6);
+            document.getElementById('aav-out-dna-optimem').textContent = formatNumber(dnaOptimem);
+            document.getElementById('aav-out-dna-total').textContent = formatNumber(totalDNAMix);
+
+            document.getElementById('aav-out-pei-vol').textContent = formatNumber(finalPEI);
+            document.getElementById('aav-out-pei-optimem').textContent = formatNumber(peiOptimem);
+            document.getElementById('aav-out-pei-total').textContent = formatNumber(totalPEIMix);
+        }
+
+        // --- Lentivirus Calculation Logic ---
+        function calculateLenti() {
+            // Section A Inputs
+            const cultureVol = parseFloat(document.getElementById('lenti-culture-vol').value) || 0;
+            const dishes = parseFloat(document.getElementById('lenti-dishes').value) || 0;
+
+            // Section A Formulas
+            const peiVol = 12.32 * cultureVol * dishes;
+            const optimemVolA = 37.68 * cultureVol * dishes;
+            const totalVolA = 50 * cultureVol * dishes;
+
+            // Update DOM Section A
+            document.getElementById('lenti-out-pei-vol').textContent = formatNumber(peiVol);
+            document.getElementById('lenti-out-optimem-vol').textContent = formatNumber(optimemVolA);
+            document.getElementById('lenti-out-total-vol').textContent = formatNumber(totalVolA);
+
+            // Section B Inputs
+            const targetVol = parseFloat(document.getElementById('lenti-target-vol').value) || 0;
+            const pspax2 = parseFloat(document.getElementById('lenti-pspax2').value) || 0;
+            const pmd2g = parseFloat(document.getElementById('lenti-pmd2g').value) || 0;
+            const transfer = parseFloat(document.getElementById('lenti-transfer').value) || 0;
+
+            // Section B Formulas
+            const optimemVolB = targetVol - (pspax2 + pmd2g + transfer);
+
+            // Update DOM Section B
+            document.getElementById('lenti-out-dna-optimem').textContent = formatNumber(optimemVolB);
+            document.getElementById('lenti-out-dna-total').textContent = formatNumber(targetVol);
+        }
+
+        // Attach Event Listeners
+        const aav6Inputs = ['aav-donor-conc', 'aav-pgdm6-conc', 'aav-dishes'];
+        aav6Inputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateAAV6);
+        });
+
+        const lentiInputs = ['lenti-culture-vol', 'lenti-dishes', 'lenti-target-vol', 'lenti-pspax2', 'lenti-pmd2g', 'lenti-transfer'];
+        lentiInputs.forEach(id => {
+            document.getElementById(id).addEventListener('input', calculateLenti);
+        });
+
+        // Initialize calculations on page load
+        window.onload = function() {
+            calculateAAV6();
+            calculateLenti();
+        };
+    </script>
+</body>
+</html>
