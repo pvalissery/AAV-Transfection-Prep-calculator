@@ -1,10 +1,8 @@
-# AAV Transfection Calculator 🧫
+# AAV Transfection Calculator 
 
 A browser-based calculator for viral vector production (AAV/Lentivirus). It handles the math for multi-plasmid transfections, PEI ratios, and OptiMEM volumes across different dish sizes so you don't have to. 
 
-Try it live here: [https://pvalissery.github.io/AAV-Transfection-Prep-calculator/]
-
-## Why build this?
+[https://pvalissery.github.io/AAV-Transfection-Prep-calculator/]
 
 I built this to take the math out of the hood. It ports the logic of standard vector production spreadsheets into a web UI. It handles the stoichiometry for packaging plasmids (like psPAX2 and pMD2.G) alongside various transfer plasmids (mR-CD55, BSG-mNG, etc.) without the risk of making mistakes. 
 
